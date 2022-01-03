@@ -33,6 +33,7 @@ def save_valuable_values(vinyl):
 
     vinyl = vinyl.split('\n')
     current_vinyl = vinyl_object
+
     for i in range(len(vinyl)):
 
         if(i == 0):
@@ -56,24 +57,36 @@ def save_valuable_values(vinyl):
     
 
 def goto_nextpage(driver):
+
     next_page = driver.find_element(By.XPATH, "//a[@aria-label='next page']")
     driver.execute_script("arguments[0].scrollIntoView(true);",next_page)
-    time.sleep(2)
+    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//a[@aria-label='next page']")))
     driver.execute_script("arguments[0].click();",next_page)
 
 def scrape_script(driver, vinyls):
 
     for x in vinyls:
+
         save_valuable_values(x.text)
+
         if(x.text) == (''):
-            driver.execute_script("arguments[0].scrollIntoView(true);",x)
-            vinyls = driver.find_elements(By.XPATH, "//li[@data-test='list-entry-product-card']")
-            time.sleep(2)
+
+            deal_with_empty_element(driver, x)
+            
+    continue_scrape(driver)
+
+def continue_scrape(driver):
+
     goto_nextpage(driver)
-    time.sleep(4)
+    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//li[@data-test='list-entry-product-card']")))
     vinyls = driver.find_elements(By.XPATH, "//li[@data-test='list-entry-product-card']")
     scrape_script(driver,vinyls)
 
+def deal_with_empty_element(driver, x):
+
+    driver.execute_script("arguments[0].scrollIntoView(true);",x)
+    vinyls = driver.find_elements(By.XPATH, "//li[@data-test='list-entry-product-card']")
+    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//li[@data-test='list-entry-product-card']")))
 
 PATH = "C:\Program Files (x86)\chromedriver.exe"
 driver = webdriver.Chrome(PATH)
@@ -86,7 +99,6 @@ search = driver.find_element(By.XPATH,"//input[@id='search']").send_keys(Keys.RE
 time.sleep (2)
 
 vinyls = driver.find_elements(By.XPATH, "//li[@data-test='list-entry-product-card']")
-time.sleep(1.5)
+WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//li[@data-test='list-entry-product-card']")))
 
 scrape_script(driver, vinyls)
-
