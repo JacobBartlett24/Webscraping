@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import csv
 
+
 class vinyl_object():
     
     def __init__(self, title, artist, label, price):
@@ -17,16 +18,21 @@ class vinyl_object():
 
 def write_to_csv(vinyl):
 
-    row = [vinyl.artist,vinyl.title,vinyl.price]
+    row = [vinyl.artist,vinyl.title,vinyl.price, "Amazon Title"]
     file_name = "vinyldataamazon.csv"
-    csvfile = open(file_name, 'a+',newline = '')
+    csvfile = open(file_name, 'a+',newline = '',encoding="utf-8")
     csvwriter = csv.writer(csvfile, dialect='excel')
     csvwriter.writerow(row)
 
 def format_artist_string(artist_name):
+    
     artist_name = artist_name.split ('|')
     formatted_arist_name = artist_name[0].split(' ',1)
-    return formatted_arist_name[1]
+    if(len(formatted_arist_name)>1):
+        return formatted_arist_name[1]
+
+    else:
+        return "ErrorPlaceHolder"
 
 def format_text(vinyl_info):
 
@@ -38,6 +44,7 @@ def format_text(vinyl_info):
 
         cur_vinyl.title = vinyl_info[0]
         cur_vinyl.artist = vinyl_info[1]
+    
     
     else:
 
