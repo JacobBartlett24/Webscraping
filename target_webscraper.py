@@ -62,9 +62,9 @@ class TargetClient(object):
 
     def goto_nextpage(self):
 
-        next_page = self.driver.find_element(By.XPATH, "//a[@aria-label='next page']")
+        next_page = self.driver.find_element(By.XPATH, "//*[@id='pageBodyContainer']/div[1]/div/div[4]/div/div[1]/div[2]/div/div[2]/div/div/div[3]/button/span/div/svg']")
         self.driver.execute_script("arguments[0].scrollIntoView(true);",next_page)
-        WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.XPATH, "//a[@aria-label='next page']")))
+        WebDriverWait(self.driver, 20).until(EC.presence_of_element_located((By.XPATH, "//*[@id='pageBodyContainer']/div[1]/div/div[4]/div/div[1]/div[2]/div/div[2]/div/div/div[3]/button/span/div/svg")))
         self.driver.execute_script("arguments[0].click();",next_page)
 
 
